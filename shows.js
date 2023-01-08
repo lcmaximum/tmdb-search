@@ -1,44 +1,43 @@
-import { getShows, getDeets } from "./api.js";
+import { getShows, getDeets, getSeason } from "./api.js";
 
 const showDiv = document.getElementById("show-div");
-/* import { getPopularMovies } from "./api.js";
-import { config } from "./config.js";
+const rightDiv = document.getElementById("right-div");
 
-const moviesDiv = document.getElementById("movies");
-export async function renderMovies() {
-  console.log("render movies");
-  const movies = await getPopularMovies();
-  console.log("movies", movies);
-  moviesDiv.innerHTML = movies
-    .map((movie) => {
-      return `<li class='col-4 col-lg-3 col-xl-2 p-1'>
-      <a href='https://themoviedb.org/movie/${movie.id}'><img src='${config.image_base_url}${movie.poster_path}'></a> </li>`;
-    })
-    .join("");
+async function renderEpisodes(season, div) {
+  console.log("season episodes: ", season.episodes);
+  for (let i = 0; i < season.episodes.length; i++) {
+    div.innerHTML += season.episodes[i].name + "<br />";
+  }
 }
-*/
+
+async function renderSeasons(id, title, seasons) {
+  rightDiv.innerHTML = "<h3>" + title + "</h3>";
+  for (let i = 1; i <= seasons; i++) {
+    const season = await getSeason(id, i);
+    let seasonDiv = document.createElement("div");
+    rightDiv.appendChild(seasonDiv);
+    seasonDiv.innerHTML = "<h4>" + season.name + "</h4>";
+    seasonDiv.addEventListener(
+      "click",
+      renderEpisodes.bind(null, season, seasonDiv)
+    );
+    //rightDiv.innerHTML += "<p>" + season.name + "</p>";
+    console.log("season: ", season);
+  }
+}
 
 export async function renderShows() {
   const shows = await getShows();
   console.log("got shows: ", shows.results);
-  /* showDiv.innerHTML = shows.results
-    .map((show) => {
-      return `<p>${show.name}</p>`;
-    })
-    .join("");
- */
   for (let i = 0; i < shows.results.length; i++) {
-    const newP = document.createElement("p");
+    async function displayDeets() {
+      const blob = await getDeets(shows.results[i].id);
+      console.log("Deets");
+      console.log("blob: ", blob);
+      renderSeasons(blob.id, blob.name, blob.number_of_seasons);
+    }
+    let newP = document.createElement("p");
     showDiv.appendChild(newP);
     newP.textContent = shows.results[i].name;
-    async function showDeets() {
-      const tvDeets = await getDeets(shows.results[i].id);
-      console.log(tvDeets.name, tvDeets.overview);
-    }
-    newP.addEventListener("click", showDeets);
+    newP.addEventListener("click", displayDeets);
   }
-}
-
-export function testing() {
-  console.log("testing");
-}
