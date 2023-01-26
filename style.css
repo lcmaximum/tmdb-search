@@ -1,0 +1,48 @@
+* {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 85vw;
+}
+
+h1 {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.season-title,
+.results-show {
+  color: rgb(25, 125, 210);
+  font-weight: bold;
+  padding: 1ch;
+}
+
+.season-title:hover,
+.results-show:hover {
+  cursor: pointer;
+  color: darkblue;
+}
+
+button {
+  color: blue;
+  font-weight: bold;
+  background: aliceblue;
+  border: none;
+}
+
+#search-button {
+  color: black;
+  border: 1px solid;
+  border-radius: 3px;
+}
+
+.open-seasons {
+  transition: 1s;
+  transform: translate(-40vw);
+  background: aliceblue;
+  width: 80vw;
+}
